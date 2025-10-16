@@ -1,263 +1,264 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rolls & More - Food Demo</title>
-  <style>
-    /* Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "Poppins", sans-serif;
-    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Rolls & More - Order Now</title>
+<style>
+  :root {
+    --bg: #f3ede7;
+    --card: #fff8f1;
+    --accent: #d97706;
+    --accent-light: #fbbf24;
+    --green: #25D366;
+    --text: #3a2f23;
+    --muted: #6b6b6b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Poppins", sans-serif; }
+  body { background: var(--bg); color: var(--text); line-height: 1.4; }
 
-    body {
-      background: #fff8f0;
-      color: #333;
-      overflow-x: hidden;
-    }
+  header {
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    color: white; text-align: center; padding: 14px; font-weight: 700;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
 
-    header {
-      background: #ff6b35;
-      color: white;
-      padding: 15px 0;
-      text-align: center;
-      font-size: 1.6rem;
-      font-weight: 600;
-      letter-spacing: 1px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-    }
+  .hero {
+    text-align: center; padding: 40px 16px;
+  }
+  .hero h1 { font-size: 28px; margin-bottom: 8px; }
+  .hero p { color: var(--muted); }
 
-    .hero {
-      text-align: center;
-      padding: 40px 20px;
-      background: linear-gradient(to right, #ff6b35, #ffa947);
-      color: white;
-    }
+  section { max-width: 1200px; margin: 20px auto; padding: 0 18px; }
 
-    .hero h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-    }
+  .popular h2, .menu h2 { color: var(--accent); margin-bottom: 12px; }
 
-    .hero p {
-      font-size: 1.1rem;
-      opacity: 0.9;
-    }
+  .popular-items, .menu-grid {
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  }
 
-    /* Popular Items Slider */
-    .popular {
-      margin: 40px 0;
-      padding: 0 20px;
-    }
+  .card {
+    background: var(--card);
+    border-radius: 12px;
+    width: 220px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    text-align: center;
+    padding: 12px;
+  }
 
-    .popular h2 {
-      text-align: center;
-      font-size: 2rem;
-      margin-bottom: 20px;
-      color: #ff6b35;
-    }
+  .card img {
+    width: 100%; height: 150px; object-fit: cover; border-radius: 10px;
+  }
+  .card .title { font-weight: 700; margin-top: 8px; }
+  .card .price { color: var(--accent); font-weight: 700; margin: 6px 0; }
 
-    .popular-items {
-      display: flex;
-      gap: 15px;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      padding-bottom: 10px;
-    }
+  .controls { display: flex; justify-content: center; gap: 10px; }
+  .qty-btn {
+    border: none; background: var(--accent); color: #fff; width: 32px; height: 32px;
+    border-radius: 50%; font-size: 18px; cursor: pointer;
+  }
 
-    .popular-item {
-      min-width: 200px;
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-      text-align: center;
-      padding: 15px;
-      flex-shrink: 0;
-    }
+  /* cart bar */
+  .cart-bar {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    color: #fff; padding: 14px 22px; border-radius: 999px;
+    display: flex; align-items: center; gap: 16px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    cursor: pointer;
+    font-weight: 700;
+    z-index: 1200;
+  }
 
-    .popular-item img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 10px;
-      margin-bottom: 10px;
-    }
+  /* checkout panel */
+  .checkout-panel {
+    position: fixed; left: 0; right: 0; bottom: -100%;
+    background: #fff; border-radius: 18px 18px 0 0;
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
+    transition: bottom 0.4s ease;
+    padding: 20px;
+    max-height: 85vh;
+    overflow-y: auto;
+    z-index: 2000;
+  }
+  .checkout-panel.active { bottom: 0; }
 
-    .popular-item h3 {
-      color: #333;
-      font-size: 1.2rem;
-      margin-bottom: 5px;
-    }
+  .checkout-header { display: flex; justify-content: space-between; align-items: center; }
+  .checkout-header h3 { color: var(--accent); }
+  .close-btn { border: none; background: var(--accent); color: #fff; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
 
-    .popular-item p {
-      color: #ff6b35;
-      font-weight: bold;
-    }
+  .checkout-list {
+    display: flex; flex-direction: column; gap: 12px; margin-top: 16px;
+  }
+  .checkout-item {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--card);
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .checkout-item img {
+    width: 70px; height: 60px; object-fit: cover; border-radius: 10px;
+  }
+  .checkout-item .info { flex: 1; }
+  .checkout-item .info h4 { margin-bottom: 4px; }
+  .checkout-item .info p { color: var(--muted); font-size: 14px; }
+  .checkout-item .price { color: var(--accent); font-weight: 700; }
 
-    /* Menu Section */
-    .menu {
-      padding: 20px;
-    }
+  .checkout-bottom {
+    text-align: center; margin-top: 20px;
+  }
+  .grand { font-weight: 800; font-size: 18px; margin-bottom: 14px; }
+  .order-btn {
+    background: var(--green);
+    border: none;
+    color: white;
+    padding: 16px 28px;
+    font-size: 18px;
+    border-radius: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  }
 
-    .menu h2 {
-      text-align: center;
-      color: #ff6b35;
-      font-size: 2rem;
-      margin-bottom: 20px;
-    }
-
-    .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-    }
-
-    .menu-item {
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-      text-align: center;
-      padding: 15px;
-      transition: transform 0.3s;
-    }
-
-    .menu-item:hover {
-      transform: translateY(-5px);
-    }
-
-    .menu-item img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 10px;
-      margin-bottom: 10px;
-    }
-
-    .menu-item h3 {
-      font-size: 1.2rem;
-      margin-bottom: 5px;
-      color: #333;
-    }
-
-    .menu-item p {
-      color: #ff6b35;
-      font-weight: bold;
-    }
-
-    /* Call & Footer */
-    .contact {
-      text-align: center;
-      margin: 40px 0;
-    }
-
-    .contact button {
-      background: #ff6b35;
-      border: none;
-      color: white;
-      padding: 12px 25px;
-      font-size: 1.1rem;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .contact button:hover {
-      background: #ff8850;
-    }
-
-    footer {
-      background: #333;
-      color: white;
-      text-align: center;
-      padding: 15px 0;
-      font-size: 0.9rem;
-      margin-top: 40px;
-    }
-
-    /* Scrollbar style for slider */
-    .popular-items::-webkit-scrollbar {
-      height: 8px;
-    }
-    .popular-items::-webkit-scrollbar-thumb {
-      background: #ff6b35;
-      border-radius: 10px;
-    }
-  </style>
+</style>
 </head>
 <body>
 
-  <header>Rolls & More 🍴</header>
+<header>Rolls & More 🍴</header>
 
-  <section class="hero">
+<main>
+  <div class="hero">
     <h1>Welcome to Rolls & More!</h1>
-    <p>Fresh, crispy & full of flavor — ready to make your day delicious.</p>
-  </section>
+    <p>Fresh, tasty and fast! Choose your favorites below 👇</p>
+  </div>
 
-  <!-- Popular Items -->
   <section class="popular">
     <h2>🔥 Popular Items</h2>
-    <div class="popular-items">
-      <div class="popular-item">
-        <img src="chicken-roll.jpg" alt="Chicken Roll">
-        <h3>Chicken Roll</h3>
-        <p>Rs. 250</p>
-      </div>
-      <div class="popular-item">
-        <img src="burger.jpg" alt="Cheese Burger">
-        <h3>Cheese Burger</h3>
-        <p>Rs. 350</p>
-      </div>
-      <div class="popular-item">
-        <img src="pizza.jpg" alt="BBQ Pizza">
-        <h3>BBQ Pizza</h3>
-        <p>Rs. 800</p>
-      </div>
-      <div class="popular-item">
-        <img src="fries.jpg" alt="Masala Fries">
-        <h3>Masala Fries</h3>
-        <p>Rs. 180</p>
-      </div>
-    </div>
+    <div class="popular-items" id="popular"></div>
   </section>
 
-  <!-- Menu -->
   <section class="menu">
-    <h2>🍗 Our Menu</h2>
-    <div class="menu-grid">
-      <div class="menu-item">
-        <img src="zinger-roll.jpg" alt="Zinger Roll">
-        <h3>Zinger Roll</h3>
-        <p>Rs. 280</p>
-      </div>
-      <div class="menu-item">
-        <img src="club-sandwich.jpg" alt="Club Sandwich">
-        <h3>Club Sandwich</h3>
-        <p>Rs. 300</p>
-      </div>
-      <div class="menu-item">
-        <img src="crispy-chicken.jpg" alt="Crispy Chicken">
-        <h3>Crispy Chicken</h3>
-        <p>Rs. 450</p>
-      </div>
-      <div class="menu-item">
-        <img src="drink.jpg" alt="Cold Drink">
-        <h3>Cold Drink</h3>
-        <p>Rs. 80</p>
-      </div>
-    </div>
+    <h2>🍗 Full Menu</h2>
+    <div class="menu-grid" id="menu"></div>
   </section>
+</main>
 
-  <section class="contact">
-    <h2>Order Now 📞</h2>
-    <button onclick="window.location.href='tel:+923001234567'">Call to Order</button>
-  </section>
+<!-- cart bar -->
+<div class="cart-bar" onclick="openCheckout()">
+  🛒 <span id="cartCount">0</span> items — <span id="cartTotal">Rs. 0</span>
+</div>
 
-  <footer>
-    © 2025 Rolls & More | Designed for Demo Purposes
-  </footer>
+<!-- checkout panel -->
+<div class="checkout-panel" id="checkoutPanel">
+  <div class="checkout-header">
+    <h3>Your Order</h3>
+    <button class="close-btn" onclick="closeCheckout()">Close</button>
+  </div>
 
+  <div class="checkout-list" id="checkoutList"></div>
+
+  <div class="checkout-bottom">
+    <div class="grand" id="grandTotal">Total: Rs. 0</div>
+    <button class="order-btn" onclick="sendOrder()">📦 Order on WhatsApp</button>
+  </div>
+</div>
+
+<footer style="text-align:center;padding:16px;color:var(--muted)">© 2025 Rolls & More — Demo</footer>
+
+<script>
+const items = [
+  {id:'roll',name:'Chicken Roll',price:250,img:'chicken-roll.jpg'},
+  {id:'burger',name:'Cheese Burger',price:350,img:'burger.jpg'},
+  {id:'pizza',name:'BBQ Pizza',price:800,img:'pizza.jpg'},
+  {id:'fries',name:'Masala Fries',price:180,img:'fries.jpg'},
+  {id:'sandwich',name:'Club Sandwich',price:300,img:'club-sandwich.jpg'},
+  {id:'drink',name:'Cold Drink',price:80,img:'drink.jpg'}
+];
+
+let cart = {};
+
+function renderMenu(){
+  const menu=document.getElementById('menu');
+  const popular=document.getElementById('popular');
+  items.forEach(it=>{
+    const card=`
+    <div class="card">
+      <img src="${it.img}" alt="${it.name}">
+      <div class="title">${it.name}</div>
+      <div class="price">Rs. ${it.price}</div>
+      <div class="controls">
+        <button class="qty-btn" onclick="changeQty('${it.id}',-1)">−</button>
+        <div id="qty-${it.id}">0</div>
+        <button class="qty-btn" onclick="changeQty('${it.id}',1)">+</button>
+      </div>
+    </div>`;
+    menu.innerHTML+=card;
+    if(['roll','burger','pizza','fries'].includes(it.id))
+      popular.innerHTML+=card;
+  });
+}
+renderMenu();
+
+function changeQty(id,delta){
+  const item=items.find(i=>i.id===id);
+  if(!item)return;
+  if(!cart[id])cart[id]={...item,qty:0};
+  cart[id].qty+=delta;
+  if(cart[id].qty<0)cart[id].qty=0;
+  document.getElementById('qty-'+id).innerText=cart[id].qty;
+  updateCart();
+}
+
+function updateCart(){
+  let qty=0,total=0;
+  for(let k in cart){qty+=cart[k].qty;total+=cart[k].qty*cart[k].price;}
+  document.getElementById('cartCount').innerText=qty;
+  document.getElementById('cartTotal').innerText='Rs. '+total;
+  document.getElementById('grandTotal').innerText='Total: Rs. '+total;
+  renderCheckout();
+}
+
+function renderCheckout(){
+  const box=document.getElementById('checkoutList');
+  box.innerHTML='';
+  for(let k in cart){
+    const it=cart[k]; if(it.qty<=0)continue;
+    box.innerHTML+=`
+      <div class="checkout-item">
+        <img src="${it.img}" alt="${it.name}">
+        <div class="info">
+          <h4>${it.name}</h4>
+          <p>${it.qty} x Rs. ${it.price}</p>
+        </div>
+        <div class="price">Rs. ${it.qty*it.price}</div>
+      </div>`;
+  }
+}
+
+function openCheckout(){
+  const totalItems=Object.values(cart).reduce((a,b)=>a+b.qty,0);
+  if(totalItems===0){alert('Add items to cart first!');return;}
+  document.getElementById('checkoutPanel').classList.add('active');
+}
+function closeCheckout(){
+  document.getElementById('checkoutPanel').classList.remove('active');
+}
+
+function sendOrder(){
+  let msg="Assalam o Alaikum! I want to place an order:%0A";
+  let total=0;
+  for(let k in cart){
+    const it=cart[k];
+    if(it.qty>0){
+      msg+=`• ${it.name} x${it.qty} = Rs ${it.qty*it.price}%0A`;
+      total+=it.qty*it.price;
+    }
+  }
+  msg+=`%0ATotal: Rs ${total}%0AName: [Your Name]%0AAddress: [Your Address]`;
+  const phone='+923001234567'; // change to your WhatsApp number
+  window.open(`https://wa.me/${phone.replace('+','')}?text=${msg}`,'_blank');
+}
+</script>
 </body>
 </html>
